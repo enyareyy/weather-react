@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-
+import './App.css';
 const App = () => {
   const [weather, setWeather]=useState(null)
   const [city, setCity] =useState("Vegas")
@@ -27,15 +27,43 @@ const App = () => {
   }
 
   return (
-    <div> 
-      <form onSubmit={handle}>
-        <input type="text" placeholder='Search country' value={city}
-          onChange={(e) => setCity(e.target.value)}/>
-      </form>
-      <h2>{weather.name}</h2>
-      <h4>{Math.round(weather.main.temp-273.15)}°C</h4>
-      <img src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`} />
-      <div>{weather.weather[0].main}</div>
+    <div>
+      <div className='head'>
+        <h1>Прогноз погоды</h1>
+        <div className='center-container'>
+          <form onSubmit={handle} className='input-container'>
+            <input
+              id="countryInput"
+              type="text"
+              placeholder="Введите название города"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+            />
+            <button id="countryBtn" type="submit">Показать</button>
+          </form>
+        </div>
+      </div>
+
+      <div className='main' style={{ display: weather ? "flex" : "none" }}>
+        <div id='list'>
+          {weather && weather.main ? (
+            <>
+              <div>
+                <h1>{weather.name} <span>{weather.sys.country}</span></h1>
+                <h1 className='temp'><strong>{weather.main.temp}°C</strong></h1>
+                <p>Ветер: {weather.wind.speed} м/с</p>
+                <p>Влажность: {weather.main.humidity}%</p>
+              </div>
+              <div>
+                <img src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`} alt="weather icon" />
+              </div>
+            </>
+          ) : (
+            <h2>Введите корректный город</h2>
+          )}
+        </div>
+        <div className='list-2'></div>
+      </div>
     </div>
   )
 }
